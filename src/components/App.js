@@ -6,6 +6,7 @@ import { auth } from 'firebase';
 function App() {
   const [init, setInit] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userObj, setUserObjn] = useState(null);
   // console.log(authService.currentUser);
   // setInterval(() => {
   //   console.log(authService.currentUser);
@@ -14,6 +15,7 @@ function App() {
     authService.onAuthStateChanged((user) => {
       if (user) {
         setIsLoggedIn(true);
+        setUserObjn(user);
       } else {
         setIsLoggedIn(false);
       }
@@ -22,7 +24,11 @@ function App() {
   }, []);
   return (
     <>
-      {init ? <AppRouter isLoggedIn={isLoggedIn} /> : 'Initializing...'}
+      {init ? (
+        <AppRouter isLoggedIn={isLoggedIn} userObj={userObj} />
+      ) : (
+        'Initializing...'
+      )}
       <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
     </>
   );
