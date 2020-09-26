@@ -5,6 +5,7 @@ const Home = ({ userObj }) => {
   // console.log('userObj', userObj);
   const [nweet, setNweet] = useState('');
   const [nweets, setNweets] = useState([]);
+  const [attachment, setAttachment] = useState();
   useEffect(() => {
     dbService.collection('nweets').onSnapshot((snapshot) => {
       // 실시간 db변화를 감지. read, delete, update 모두 포함
@@ -31,6 +32,24 @@ const Home = ({ userObj }) => {
     } = event;
     setNweet(value);
   };
+  const onFileChange = (event) => {
+    // console.log(event.target.files);
+    const {
+      target: { files },
+    } = event;
+    const theFile = files[0];
+    const reader = new FileReader();
+    reader.onloadend = (finishedEvent) => {
+      // console.log(finishedEvent);
+      const {
+        currentTarget: { result },
+      } = finishedEvent;
+      setAttachment(result);
+    };
+    reader.readAsDataURL(theFile);
+  };
+  const onClearAttachment = () => setAttachment(null);
+
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -41,7 +60,14 @@ const Home = ({ userObj }) => {
           value={nweet}
           onChange={onChange}
         />
+        <input type="file" accept="image/*" onChange={onFileChange} />
         <input type="submit" value="Nweet" />
+        {attachment && (
+          <div>
+            <img src={attachment} width="50px" height="50px" />
+            <button onClick={onClearAttachment}>Clear</button>
+          </div>
+        )}
       </form>
       <div>
         {nweets.map((nweet) => (
