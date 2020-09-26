@@ -4,7 +4,7 @@ import { authService } from 'fbase';
 
 function App() {
   const [init, setInit] = useState(false);
-  const [userObj, setUserObjn] = useState(null);
+  const [userObj, setUserObj] = useState(null);
   // console.log(authService.currentUser);
   // setInterval(() => {
   //   console.log(authService.currentUser);
@@ -12,15 +12,31 @@ function App() {
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       if (user) {
-        setUserObjn(user);
+        setUserObj({
+          displayName: user.displayName,
+          uid: user.uid,
+          updateProfile: (args) => user.updateProfile(args),
+        });
       }
       setInit(true);
     });
   }, []);
+  const refreshUser = () => {
+    const user = authService.currentUser;
+    setUserObj({
+      displayName: user.displayName,
+      uid: user.uid,
+      updateProfile: (args) => user.updateProfile(args),
+    });
+  };
   return (
     <>
       {init ? (
-        <AppRouter isLoggedIn={Boolean(userObj)} userObj={userObj} />
+        <AppRouter
+          isLoggedIn={Boolean(userObj)}
+          userObj={userObj}
+          refreshUser={refreshUser}
+        />
       ) : (
         'Initializing...'
       )}
