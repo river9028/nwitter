@@ -1,3 +1,7 @@
 import React from 'react';
 
-export default () => <span>Edit Profile</span>;
+function EditProfile() {
+  return <div></div>;
+}
+
+export default EditProfile;

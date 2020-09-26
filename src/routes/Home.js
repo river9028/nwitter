@@ -6,7 +6,7 @@ const Home = ({ userObj }) => {
   // console.log('userObj', userObj);
   const [nweet, setNweet] = useState('');
   const [nweets, setNweets] = useState([]);
-  const [attachment, setAttachment] = useState();
+  const [attachment, setAttachment] = useState('');
   useEffect(() => {
     dbService.collection('nweets').onSnapshot((snapshot) => {
       // 실시간 db변화를 감지. read, delete, update 모두 포함
